@@ -21,7 +21,7 @@ class Game {
                 score: 200
             }
         ];
-        this.level_screen();
+        this.start_screen();
     }
     start_screen() {
         this.writeAsteroidHeading();

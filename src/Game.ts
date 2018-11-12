@@ -17,7 +17,6 @@ class Game {
         this.canvas.height = window.innerHeight;
         //set the context of the canvas
         this.ctx = this.canvas.getContext('2d');
-
         this.highscores = [
             {
                 playerName: 'Loek',
@@ -32,10 +31,9 @@ class Game {
                 score: 200
             }
         ]
-
         // all screens: uncomment to activate 
-        //this.start_screen();
-        this.level_screen();
+        this.start_screen();
+        //this.level_screen();
         //this.title_screen();
 
     }
@@ -125,6 +123,19 @@ class Game {
         img.onload = () => {
             this.ctx.drawImage(img, this.canvas.width / 2 - img.width / 2, this.canvas.height / 2 - img.height / 2 + 90)
             this.ctx.fillText("PLAY", this.canvas.width / 2, this.canvas.height / 2 + 100)
+            // let canvas = this.canvas
+            // this.canvas.addEventListener("click", function (e) {
+            //     checkClick(e, img, canvas);
+            // }, false);
+            // function checkClick(event: any, img: any, canvas: any) {
+            //     console.log(event)
+            //     if (event.clientX > (canvas.width / 2 - img.width / 2) && event.clientX < (canvas.width / 2 + img.width / 2)) {
+            //         console.log("x")
+            //         if (event.clientY > (canvas.height / 2 - img.height / 2) && event.clientY < (canvas.height / 2 + img.height / 2)) {
+            //             console.log("y")
+            //         }
+            //     }
+            // }
         }
         img.src = "./assets/images/SpaceShooterRedux/PNG/UI/buttonBlue.png";
 
