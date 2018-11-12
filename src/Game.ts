@@ -7,7 +7,7 @@ class Game {
     //some global player attributes
     private readonly player: string = "Player1";
     private readonly score: number = 400;
-    private readonly lives: number = 3;
+    private readonly lives: number = 6;
     private readonly highscores: Array<any>; //TODO: do not use 'any': write an interface!
 
     public constructor(canvasId: HTMLCanvasElement) {
@@ -34,9 +34,9 @@ class Game {
         ]
 
         // all screens: uncomment to activate 
-        this.start_screen();
-        // this.level_screen();
-        // this.title_screen();
+        //this.start_screen();
+        this.level_screen();
+        //this.title_screen();
 
     }
 
@@ -61,6 +61,10 @@ class Game {
      * Function to initialize the level screen
      */
     public level_screen() {
+        this.loadLives()
+        this.drawCurScore()
+        this.drawRAsteroid()
+        this.drawShip()
         //1. load life images
         //2. draw current score
         //3. draw random asteroids
@@ -73,6 +77,8 @@ class Game {
     * Function to initialize the title screen   
     */
     public title_screen() {
+        this.yourScore()
+        this.writeHighscore()
         //1. draw your score
         //2. draw all highscores
     }
@@ -129,6 +135,34 @@ class Game {
             this.ctx.drawImage(img, this.canvas.width / 2 - img.width / 2, this.canvas.height / 2 - img.height / 2 + 10)
         }
         img.src = "./assets/images/SpaceShooterRedux/PNG/Meteors/meteorBrown_big1.png";
+    }
+    //level_screen
+    public loadLives() {
+        let i = this.lives
+        let x = 10
+        while (i > 0) {
+            let Lives = new Image();
+            Lives.onload = () => {
+                this.ctx.drawImage(Lives, x, 10)
+                x += 40
+            }
+            Lives.src = "./assets/images/SpaceShooterRedux/PNG/UI/playerLife1_red.png";
+            i--
+        }
+        let LivesN = new Image();
+        LivesN.onload = () => {
+            this.ctx.drawImage(LivesN, x + 10, 10)
+        }
+        LivesN.src = `./assets/images/SpaceShooterRedux/PNG/UI/numeral${this.lives}.png`;
+    }
+    public drawCurScore() {
+        this.ctx.font = `20px Minecraft`
+        this.ctx.fillStyle = "#fff"
+        this.ctx.textAlign = "left"
+        let txt = `Your Score: ${this.score}`
+        this.ctx.fillText(txt, this.canvas.width - this.ctx.measureText(txt).width - 10, 0 + 20)
+    }
+    public drawRAsteroid() {
         setInterval(() => {
             let n = this.randomNumber(1, 4)
             let x = this.randomNumber(0, this.canvas.width)
@@ -138,12 +172,27 @@ class Game {
                 this.ctx.drawImage(img, x - 15, y - 15)
             }
             img.src = `./assets/images/SpaceShooterRedux/PNG/Meteors/meteorBrown_big${n}.png`;
-        }, 10000)
+        }, 1000)
+    }
+    public drawShip() {
+        let img = new Image();
+        img.onload = () => {
+            this.ctx.drawImage(img, this.canvas.width / 2 - img.width / 2, this.canvas.height / 2)
+        }
+        img.src = `./assets/images/SpaceShooterRedux/PNG/playerShip1_blue.png`;
+    }
+    //title_screen
+    public yourScore() {
+        this.ctx.font = `40px Minecraft`
+        this.ctx.fillStyle = "#fff"
+        this.ctx.textAlign = "center"
+        this.ctx.fillText(`Your Score: ${this.score} \nCongrats ${this.player}`, this.canvas.width / 2, this.canvas.height / 4 - 40)
     }
     public writeHighscore() {
         this.ctx.font = `40px Minecraft`
-        this.ctx.fillStyle = "#999"
-        let y = this.canvas.height / 2 + 40 * 2
+        this.ctx.fillStyle = "yellow"
+        this.ctx.textAlign = "center"
+        let y = this.canvas.height / 4 + 40
         let id = 0
         this.highscores.forEach(element => {
             id++
