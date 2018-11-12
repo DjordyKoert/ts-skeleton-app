@@ -1,8 +1,8 @@
 class Game {
     //global attr for canvas
     //readonly attributes must be initialized in the constructor
-    private readonly canvas: any; // find the right type
-    private readonly ctx: any; // find the right type
+    private readonly canvas: HTMLCanvasElement; // find the right type
+    private readonly ctx: CanvasRenderingContext2D; // find the right type
 
     //some global player attributes
     private readonly player: string = "Player1";
@@ -45,7 +45,12 @@ class Game {
      * Function to initialize the splash screen
      */
     public start_screen() {
-        //1. add 'Asteroids' text
+        this.writeAsteroidHeading()
+        this.writeIntroText()
+        this.writeStartButton()
+        this.drawAsteroid()
+        //1. add 'Asteroids' text DONE
+
         //2. add 'Press to play' text
         //3. add button with 'start' text
         //4. add Asteroid image
@@ -81,6 +86,70 @@ class Game {
     */
     public randomNumber(min: number, max: number): number {
         return Math.round(Math.random() * (max - min) + min);
+    }
+    //Start menu
+    public writeAsteroidHeading() {
+        this.ctx.font = "100px Minecraft"
+        let color = 1
+        this.ctx.fillStyle = `#${color}`
+        this.ctx.textAlign = "center"
+        this.ctx.fillText("Asteroids", this.canvas.width / 2, this.canvas.height / 2 - 100)
+        setInterval(() => {
+            if (color > 999) color = 1
+            this.ctx.font = "100px Minecraft"
+            this.canvas.style.backgroundColor = `#${color}`
+            this.canvas.style.backgroundImage = ""
+            color++
+            this.ctx.fillStyle = `#${color}`
+            this.ctx.textAlign = "center"
+            this.ctx.fillText("Asteroids", this.canvas.width / 2, this.canvas.height / 2 - 100)
+        }, 100)
+    }
+    public writeIntroText() {
+        this.ctx.font = "30px Minecraft"
+        this.ctx.fillStyle = "White"
+        this.ctx.textAlign = "center"
+        this.ctx.fillText("Press Play to start", this.canvas.width / 2, this.canvas.height / 2 - 50)
+    }
+    public writeStartButton() {
+        this.ctx.font = "30px Minecraft"
+        this.ctx.fillStyle = "#777"
+        this.ctx.textAlign = "center"
+        let img = new Image();
+        img.onload = () => {
+            this.ctx.drawImage(img, this.canvas.width / 2 - img.width / 2, this.canvas.height / 2 - img.height / 2 + 90)
+            this.ctx.fillText("PLAY", this.canvas.width / 2, this.canvas.height / 2 + 100)
+        }
+        img.src = "./assets/images/SpaceShooterRedux/PNG/UI/buttonBlue.png";
+
+    }
+    public drawAsteroid() {
+        let img = new Image();
+        img.onload = () => {
+            this.ctx.drawImage(img, this.canvas.width / 2 - img.width / 2, this.canvas.height / 2 - img.height / 2 + 10)
+        }
+        img.src = "./assets/images/SpaceShooterRedux/PNG/Meteors/meteorBrown_big1.png";
+        setInterval(() => {
+            let n = this.randomNumber(1, 4)
+            let x = this.randomNumber(0, this.canvas.width)
+            let y = this.randomNumber(0, this.canvas.height)
+            let img = new Image();
+            img.onload = () => {
+                this.ctx.drawImage(img, x - 15, y - 15)
+            }
+            img.src = `./assets/images/SpaceShooterRedux/PNG/Meteors/meteorBrown_big${n}.png`;
+        }, 10000)
+    }
+    public writeHighscore() {
+        this.ctx.font = `40px Minecraft`
+        this.ctx.fillStyle = "#999"
+        let y = this.canvas.height / 2 + 40 * 2
+        let id = 0
+        this.highscores.forEach(element => {
+            id++
+            this.ctx.fillText(`${id}. ${element.playerName}, Score: ${element.score}`, this.canvas.width / 2, y)
+            y = y + 40
+        });
     }
 }
 
