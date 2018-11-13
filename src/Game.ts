@@ -32,8 +32,8 @@ class Game {
             }
         ]
         // all screens: uncomment to activate 
-        this.start_screen();
-        //this.level_screen();
+        //this.start_screen();
+        this.level_screen();
         //this.title_screen();
 
     }
@@ -63,8 +63,7 @@ class Game {
      */
     public level_screen() {
         this.loadLives()
-        let txt1 = `Your Score: ${this.score}`
-        this.writeTextCanvas(txt1, this.canvas.width - this.ctx.measureText(txt1).width - 10, 0 + 20)
+        this.writeTextCanvas(`Your Score: ${this.score}`, this.canvas.width - this.ctx.measureText(`Your Score: ${this.score}`).width - 10, 0 + 20)
         this.drawRAsteroid()
         //this.drawShip()
         this.drawImageCanvas(`./assets/images/SpaceShooterRedux/PNG/playerShip1_blue.png`, this.canvas.width / 2, this.canvas.height / 2, 1)
@@ -86,7 +85,6 @@ class Game {
         let y = this.canvas.height / 4 + 40
         let id = 0
         this.highscores.forEach(element => {
-            id++
             this.writeTextCanvas(`${id}. ${element.playerName}, Score: ${element.score}`, this.canvas.width / 2, y, 40, "#fff", "center")
             y = y + 40
         });
@@ -141,15 +139,35 @@ class Game {
         this.drawImageCanvas(`./assets/images/SpaceShooterRedux/PNG/UI/numeral${this.lives}.png`, x + 10, 10)
     }
     public drawRAsteroid() {
+        const AsteroidsBrown = [
+            "meteorBrown_big1.png",
+            "meteorBrown_big2.png",
+            "meteorBrown_big3.png",
+            "meteorBrown_big4.png",
+            "meteorBrown_med1.png",
+            "meteorBrown_med2.png",
+            "meteorBrown_small1.png",
+            "meteorBrown_small2.png",
+            "meteorBrown_tiny1.png",
+            "meteorBrown_tiny2.png",
+        ]
+        const AsteroidsGrey = [
+            "meteorGrey_big1.png",
+            "meteorGrey_big2.png",
+            "meteorGrey_big3.png",
+            "meteorGrey_big4.png",
+            "meteorGrey_med1.png",
+            "meteorGrey_med2.png",
+            "meteorGrey_small1.png",
+            "meteorGrey_small2.png",
+            "meteorGrey_tiny1.png",
+            "meteorGrey_tiny2.png",
+        ]
         setInterval(() => {
-            let n = this.randomNumber(1, 4)
+            let n = this.randomNumber(0, AsteroidsBrown.length)
             let x = this.randomNumber(0, this.canvas.width)
             let y = -10
-            let img = new Image();
-            img.onload = () => {
-                this.ctx.drawImage(img, x - 15, y - 15)
-            }
-            img.src = `./assets/images/SpaceShooterRedux/PNG/Meteors/meteorBrown_big${n}.png`;
+            this.drawImageCanvas(`./assets/images/SpaceShooterRedux/PNG/Meteors/${AsteroidsBrown[n]}`, x - 15, y)
         }, 1000)
     }
     //title_screen
