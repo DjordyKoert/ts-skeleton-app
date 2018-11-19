@@ -24,7 +24,7 @@ class Game {
                 score: 200
             }
         ];
-        this.start_screen();
+        MenuView;
     }
     start_screen() {
         this.writeTextCanvas("Asteroids", this.canvas.width / 2, this.canvas.height / 2 - 200, 100, "White", "center");
@@ -189,4 +189,92 @@ let init = function () {
     const Asteroids = new Game(document.getElementById('canvas'));
 };
 window.addEventListener('load', init);
+class CanvasHelper {
+    constructor(aCanvas) {
+        ;
+    }
+    RegisterOnClick(aCallBack) {
+        this.canvas.addEventListener('click', (aEvent) => {
+            aCallBack(aEvent.x, aEvent.y);
+        });
+    }
+    Clear() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+    GetCenter() {
+        return { X: this.canvas.width / 2, Y: this.canvas.height / 2 };
+    }
+    GetHeight() {
+        return this.canvas.height;
+    }
+    GetWidth() {
+        return this.canvas.width;
+    }
+    writeTextToCanvas(text, fontSize, aXpos, aYpos, color = "white", alignment = "center") {
+        this.ctx.font = `${fontSize}px Minecraft`;
+        this.ctx.fillStyle = color;
+        this.ctx.textAlign = alignment;
+        this.ctx.fillText(text, aXpos, aYpos);
+    }
+    writeImageToCanvas(aSrc, aXpos, aYpos) {
+        let img = new Image();
+        img.onload = () => {
+            this.ctx.drawImage(img, aXpos, aYpos);
+        };
+        img.src = aSrc;
+    }
+    writeButtonToCanvas(aCaption, aXpos = -1, aYpos = -1) {
+    }
+}
+class ViewBase {
+    constructor(aCanvas, aChangeViewCallback) {
+        this.d_alive = true;
+        this.OnClick = (aXaxis, aYaxis) => {
+            if (!this.d_alive)
+                return;
+        };
+    }
+    Render() {
+    }
+    BeforeExit() {
+        this.d_alive = false;
+    }
+}
+class MathHelper {
+    static randomNumber(min, max) {
+        return Math.round(Math.random() * (max - min) + min);
+    }
+}
+class MenuView extends ViewBase {
+    constructor(aCanvas, aChangeViewCallback) {
+        super(aCanvas, aChangeViewCallback);
+        this.HandleClick = (aXpos, aYpos) => {
+            let centerCoordinate = this.d_canvasHelper.GetCenter();
+            if (aXpos > centerCoordinate.X - 111 && aXpos < centerCoordinate.X + 111) {
+                if (aYpos > centerCoordinate.Y + 219 && aYpos < centerCoordinate.Y + 259) {
+                    this.d_canvasHelper.Clear();
+                    this.d_changeViewCallback(new GameView(this.d_canvasHelper.canvas, this.d_changeViewCallback));
+                }
+            }
+        };
+    }
+    RenderScreen() {
+        let centerCoord = this.d_canvasHelper.GetCenter();
+        this.d_canvasHelper.writeTextToCanvas("Asteroids", centerCoord.X, centerCoord.Y - 200, 100, "White", "center");
+        this.d_canvasHelper.writeTextToCanvas("Press Play to start", centerCoord.X, centerCoord.Y - 100, 30, "White", "center");
+        this.d_canvasHelper.writeImageToCanvas("./assets/images/SpaceShooterRedux/PNG/Meteors/meteorBrown_big1.png", centerCoord.X, centerCoord.Y + 10);
+    }
+}
+class GameView extends ViewBase {
+    constructor() {
+        super(...arguments);
+        this.player = "Player1";
+        this.score = 400;
+        this.lives = 3;
+        this.HandleClick = (aXpos, aYpos) => {
+        };
+    }
+    RenderScreen() {
+    }
+}
 //# sourceMappingURL=app.js.map

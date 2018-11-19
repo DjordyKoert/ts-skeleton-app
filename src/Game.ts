@@ -32,7 +32,7 @@ class Game {
             }
         ]
         // all screens: uncomment to activate 
-        this.start_screen();
+        //this.start_screen();
         //this.level_screen();
         //this.title_screen();
 
